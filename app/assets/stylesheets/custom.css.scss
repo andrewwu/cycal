@@ -1,0 +1,103 @@
+@import "bootstrap";
+/*
+<style type="text/css">
+  .cal-1 {
+    width: 84%;
+  }
+
+  .day, .header-day {
+    width: 12%;
+    display: inline-block;
+    padding: 10px;
+  }
+
+  .day {
+    height: 60px;
+  }
+</style>
+*/
+
+div {
+//  border: 1px solid black;
+}
+
+.clndr-day {
+  //margin: 10px 10px 0 0;
+  line-height: 14px;
+  color: $gray-light;
+}
+
+.clndr-controls {
+//  margin: 50px 0 20px;
+}
+
+div.day, div.header-day {
+  width: 14.2857%;
+  float: left;
+  padding: 10px;
+}
+
+.goal-header {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.goal {
+  padding: 10px;
+  background: #bdd286;
+  border-bottom: 1px solid $gray;
+  text-align: center;
+  font-size: 16px;
+  padding-top: 45px;
+}
+
+.goal:last-child {
+  border-bottom: none;
+}
+
+.day, .goal {
+  min-height: 120px;
+}
+
+.header-day {
+  text-align: center;
+  font-weight: bold;
+}
+
+div.number {
+  position: absolute;
+  top:0px;
+}
+
+div.activity {
+  padding: 7px;
+  margin-top: 23px;
+  text-align: center;
+  border: 1px solid $gray;
+  min-height: 70px;
+}
+
+.days, .goals {
+  border: 1px solid $gray;
+  border-radius: 4px;
+}
+
+.day {
+  border-right: 1px solid $gray;
+  border-bottom: 1px solid $gray;
+}
+
+/*
+.day.sun {
+  border-right: none;
+}
+*/
+
+.day:nth-child(7n) {
+  border-right: none;
+}
+
+.day:nth-last-child(-n+8) {
+  border-bottom: none;
+}

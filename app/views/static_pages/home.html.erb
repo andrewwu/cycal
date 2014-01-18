@@ -1,0 +1,139 @@
+<div class="container">
+
+<div class="cal-1">
+  <script type="text/template" id="template-calendar">
+
+    <div class="row">
+      <div class="col-md-6">
+        <div class="clndr-controls btn-group">
+
+          <div class="clndr-previous-button btn btn-default">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </div>
+
+          <div class="month btn btn-default"><%%= month + " " + year %></div>
+
+          <div class="clndr-next-button btn btn-default">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2">
+        <div class="goal-header">Weekly Goals</div>
+        <div class="goals">
+
+          <%% var weekly_total = 0; %>
+
+          <%% _.each(days, function(day, index) { %>
+
+            <%% if (!_.isEmpty(day.events)) { %>
+              <%% weekly_total += (day.events[0].duration / 60); %>
+            <%% } %>
+
+            <%% if ((index + 1) % 7 == 0 && index != 0) { %>
+              <div class="goal"><%%= weekly_total + ' hours' %></div>
+              <%% weekly_total = 0; %>
+            <%% } %>
+          <%% }); %>
+
+        </div>
+      </div>
+
+      <div class="col-md-10">
+        <div class="clndr-grid">
+          <div class="days-of-the-week">
+            <%% console.log(_.size(days)); %>
+            <%% _.each(daysOfTheWeek, function(day) { %>
+              <div class="header-day"><%%= day %></div>
+            <%% }); %>
+
+            <div class="clearfix"></div>
+
+            <div class="days">
+              <%% _.each(days, function(day, index) { %>
+                <%% console.log('index is ' + index); %>
+
+                <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>">
+                  <span class="clndr-day pull-right"><%%= day.day %></span>
+
+                  <%% if (!_.isEmpty(day.events)) { %>
+                    <%% var category = categoryArray[day.events[0].category_id]; %>
+                    <div class="activity" style="background-color: <%%= category.color %>;">
+
+                      <div class="duration">
+                        <%%= day.events[0].duration / 60 + " h" %>
+                      </div>
+
+                      <div class="category">
+                        <%%= category['label'] %>
+                      </div>
+
+                    </div>
+                  <%% } %>
+                </div>
+
+              <%% }); %>
+
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </script>
+</div>
+</div>
+
+<script>
+
+  // if events is not empty
+  // print each one
+
+  var categoryArray = [
+    { label: "Zone 2", color: "#A9E2F3" },
+    { label: "Sprint Workout", color: "#F5DA81" },
+    { label: "Threshold Test", color: "#F5A9A9" }
+  ]
+
+  console.log(categoryArray[1]);
+
+  var eventArray = [
+    { date: "2014-01-01", duration: 120, category_id: 0 },
+    { date: "2014-01-02", duration: 90, category_id: 0 },
+    { date: "2014-01-04", duration: 180, category_id: 0 },
+    { date: "2014-01-05", duration: 120, category_id: 0 },
+
+    { date: "2014-01-07", duration: 90, category_id: 0 },
+    { date: "2014-01-08", duration: 120, category_id: 0 },
+    { date: "2014-01-09", duration: 90, category_id: 0 },
+    { date: "2014-01-11", duration: 180, category_id: 0 },
+    { date: "2014-01-12", duration: 120, category_id: 0},
+
+    { date: "2014-01-14", duration: 90, category_id: 0 },
+    { date: "2014-01-15", duration: 120, category_id: 0 },
+    { date: "2014-01-16", duration: 90, category_id: 0 },
+    { date: "2014-01-18", duration: 120, category_id: 0 },
+    { date: "2014-01-19", duration: 120, category_id: 2 },
+
+    { date: "2014-01-21", duration: 120, category_id: 0 },
+    { date: "2014-01-22", duration: 120, category_id: 0 },
+    { date: "2014-01-23", duration: 90, category_id: 0 },
+    { date: "2014-01-25", duration: 270, category_id: 0 },
+    { date: "2014-01-26", duration: 180, category_id: 0 },
+
+    { date: "2014-01-28", duration: 120, category_id: 1 },
+    { date: "2014-01-29", duration: 150, category_id: 0 },
+    { date: "2014-01-30", duration: 120, category_id: 0 }
+  ];
+
+  $('.cal-1').clndr({
+    daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    template: $('#template-calendar').html(),
+    events: eventArray,
+    weekOffset: 1 
+  });
+  </script>
