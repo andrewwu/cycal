@@ -56,7 +56,7 @@
               <%% _.each(days, function(day, index) { %>
                 <%% console.log('index is ' + index); %>
 
-                <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>">
+                <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>" data-toggle="modal" data-target="#activityForm">
                   <span class="options"></span>
                   <span class="clndr-day pull-right"><%%= day.day %></span>
 
@@ -88,6 +88,51 @@
   </script>
 </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="activityForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">New Activity</h4>
+      </div>
+      <div class="modal-body">
+
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Duration</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input id="hours" type="text" class="form-control">
+                <span class="input-group-addon">h</span>
+                <input id="minutes" type="text" class="form-control">
+                <span class="input-group-addon">m</span>
+              </div>  
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category" class="col-sm-2 control-label">Category</label>
+            <div class="col-sm-10">
+              <select id="category" class="form-control chosen-select">
+                <option>Zone 2</option>
+                <option>Sprint Workout</option>
+                <option>Threshold Test</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left" onclick="confirm('Are you sure?');">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <script>
 
@@ -130,6 +175,10 @@
     { date: "2014-01-29", duration: 150, category_id: 0 },
     { date: "2014-01-30", duration: 120, category_id: 0 }
   ];
+
+  $(function(){
+    $('.chosen-select').chosen({ width: '100%' });
+  });
 
   $('.cal-1').clndr({
     daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
