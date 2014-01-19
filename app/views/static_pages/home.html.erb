@@ -57,6 +57,7 @@
                 <%% console.log('index is ' + index); %>
 
                 <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>">
+                  <span class="options"></span>
                   <span class="clndr-day pull-right"><%%= day.day %></span>
 
                   <%% if (!_.isEmpty(day.events)) { %>

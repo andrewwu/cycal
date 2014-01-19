@@ -101,3 +101,37 @@ div.activity {
 .day:nth-last-child(-n+8) {
   border-bottom: none;
 }
+
+/* CALENDAR HOVER OPTIONS */
+
+.day {
+  position: relative;
+}
+
+// TODO: see if we can tap into bootstrap glyphicons
+
+.day.event:hover {
+  span.options {
+    background: url(glyphicons_439_wrench@2x.png) no-repeat center center;
+  }
+
+  .activity {
+    opacity: 0.2;
+  }
+}
+
+.day:hover span.options {
+  background: url(glyphicons_432_plus@2x.png) no-repeat center center;
+}
+
+span.options {
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  position: absolute;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
