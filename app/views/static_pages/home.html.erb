@@ -45,7 +45,7 @@
       <div class="col-md-10">
         <div class="clndr-grid">
           <div class="days-of-the-week">
-            <%% console.log(_.size(days)); %>
+            <%% //console.log(_.size(days)); %>
             <%% _.each(daysOfTheWeek, function(day) { %>
               <div class="header-day"><%%= day %></div>
             <%% }); %>
@@ -54,9 +54,9 @@
 
             <div class="days">
               <%% _.each(days, function(day, index) { %>
-                <%% console.log('index is ' + index); %>
+                <%% //console.log('index is ' + index); %>
 
-                <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>" data-toggle="modal" data-target="#activityForm">
+                <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>" data-index="<%%= index %>" data-toggle="modal" data-target="#activityForm" data-date="<%%= day.date.format('GGGG-MM-DD') %>">
                   <span class="options"></span>
                   <span class="clndr-day pull-right"><%%= day.day %></span>
 
@@ -115,9 +115,9 @@
             <label for="category" class="col-sm-2 control-label">Category</label>
             <div class="col-sm-10">
               <select id="category" class="form-control chosen-select">
-                <option>Zone 2</option>
-                <option>Sprint Workout</option>
-                <option>Threshold Test</option>
+                <option value="1">Zone 2</option>
+                <option value="2">Sprint Workout</option>
+                <option value="3">Threshold Test</option>
               </select>
             </div>
           </div>
@@ -125,7 +125,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger pull-left" onclick="confirm('Are you sure?');">Delete</button>
+        <button type="button" class="btn btn-danger pull-left">Delete</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save</button>
       </div>
@@ -180,10 +180,87 @@
     $('.chosen-select').chosen({ width: '100%' });
   });
 
-  $('.cal-1').clndr({
+  var myCal = $('.cal-1').clndr({
     daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     template: $('#template-calendar').html(),
     events: eventArray,
     weekOffset: 1 
   });
+
+  $('[data-toggle="modal"]').on('click', function() {
+    var event = $(this).hasClass('event');
+
+    $('#activityForm').data('date', $(this).data('date'));
+    console.log('modifying date: ' + $(this).data('date'));
+
+
+    if (event) {
+      var index = parseInt($(this).data('index'));
+      //console.log(days[index].events[0]);
+      console.log(myCal);
+      //eventFindByDate
+      $('.modal').data('mode', 'edit');
+      setModalMode('edit');
+
+    } else {
+      // new event
+      console.log('no event'); 
+      setModalMode('new');
+
+    }
+  });
+
+  function setModalMode(mode) {
+    console.log("setting mode to " + mode);
+    $('#activityForm').data('mode', mode);
+
+    if (mode == 'new') {
+      $('.btn-danger').hide();
+      $('#hours').val('');
+      $('#minutes').val('');
+      $('#category').val('1');
+    } else {
+      // edit mode
+      $('.btn-danger').show();
+      $('#hours').val('5');
+      $('#minutes').val('30');
+      $('#category').val('3');
+    }
+
+    $('#category').trigger('chosen:updated');
+    console.log("mode is " + $('#activityForm').data('mode'));
+  }
+
+  $('.btn-danger').click(function() {
+    if (confirm('Are you sure?')) {
+      console.log('get and delete the event'); 
+      // TODO: remove the event
+      $('.modal').modal('hide');
+    }
+  });
+
+  function inEditMode() {
+    return $('.modal').data('mode') == 'edit';
+  }
+
+  $('.btn-primary').click(function() {
+    var date = $('#activityForm').data('date');
+
+    console.log('clicked save for date: ' + date)
+    // TODO: toss into add edit methods
+    if (inEditMode()) {
+      console.log('update and save');
+      // update events array [x]
+    } else {
+      // get implied date
+      console.log('create new');
+      // insert into events array[x]
+    }
+
+    // refresh calendar
+
+    // TODO: validation
+    $('.modal').modal('hide');
+  });
+
   </script>
