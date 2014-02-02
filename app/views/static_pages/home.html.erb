@@ -115,9 +115,9 @@
             <label for="category" class="col-sm-2 control-label">Category</label>
             <div class="col-sm-10">
               <select id="category" class="form-control chosen-select">
-                <option value="1">Zone 2</option>
-                <option value="2">Sprint Workout</option>
-                <option value="3">Threshold Test</option>
+                <option value="0">Zone 2</option>
+                <option value="1">Sprint Workout</option>
+                <option value="2">Threshold Test</option>
               </select>
             </div>
           </div>
@@ -136,16 +136,14 @@
 
 <script>
 
-  // if events is not empty
-  // print each one
+  // TODO: load and store this event array from localstorage
+/*
 
   var categoryArray = [
     { label: "Zone 2", color: "#A9E2F3" },
     { label: "Sprint Workout", color: "#F5DA81" },
     { label: "Threshold Test", color: "#F5A9A9" }
   ]
-
-  console.log(categoryArray[1]);
 
   var eventArray = [
     { date: "2014-01-01", duration: 120, category_id: 0 },
@@ -173,8 +171,43 @@
 
     { date: "2014-01-28", duration: 120, category_id: 1 },
     { date: "2014-01-29", duration: 150, category_id: 0 },
-    { date: "2014-01-30", duration: 120, category_id: 0 }
-  ];
+    { date: "2014-01-30", duration: 120, category_id: 0 },
+
+    { date: "2014-02-01", duration: 300, category_id: 0 },
+    { date: "2014-02-02", duration: 180, category_id: 0 }
+  ];*/
+  
+
+  var categoryArray = new Array();
+  var eventArray = new Array();
+
+  function loadEvents() {
+    if (!Modernizr.localstorage) { return false; }
+
+
+    // TODO: change these to constant keys
+    if (localStorage['events'] !== null && localStorage['categories'] !== null) {
+      console.log('events exist');
+      eventArray = JSON.parse(localStorage['events']);
+      categoryArray = JSON.parse(localStorage['categories']);
+      myCal.setEvents(eventArray);
+    } else {
+      // no previous data
+    }
+  }
+
+  $(function() {
+    loadEvents();
+  });
+
+  function saveEvents() {
+    if (Modernizr.localstorage) {
+      localStorage['events'] = JSON.stringify(eventArray);
+      localStorage['categories'] = JSON.stringify(categoryArray);
+    } else {
+      // TODO: no localstorage support
+    }
+  }
 
   $(function(){
     $('.chosen-select').chosen({ width: '100%' });
@@ -187,7 +220,8 @@
     weekOffset: 1 
   });
 
-  $('[data-toggle="modal"]').on('click', function() {
+
+  $(document).on('click', '[data-toggle="modal"]', function() {
     var event = $(this).hasClass('event');
 
     $('#activityForm').data('date', $(this).data('date'));
@@ -196,9 +230,7 @@
 
     if (event) {
       var index = parseInt($(this).data('index'));
-      //console.log(days[index].events[0]);
       console.log(myCal);
-      //eventFindByDate
       $('.modal').data('mode', 'edit');
       setModalMode('edit');
 
@@ -218,13 +250,30 @@
       $('.btn-danger').hide();
       $('#hours').val('');
       $('#minutes').val('');
-      $('#category').val('1');
+      $('#category').val('0');
     } else {
       // edit mode
       $('.btn-danger').show();
-      $('#hours').val('5');
-      $('#minutes').val('30');
-      $('#category').val('3');
+
+
+      // TODO: get the date from the event array
+
+      var date = $('#activityForm').data('date');
+      console.log("setting modal mode: " + date);
+
+      var result = $.grep(eventArray, function(e) { return e.date == date });      
+      console.log('result is ' + result);
+      console.log(result);
+
+      result = result[0];
+
+      var hours = Math.floor(result.duration / 60);
+      var minutes = result.duration % 60;
+      var category = result.category_id;
+
+      $('#hours').val(hours);
+      $('#minutes').val(minutes);
+      $('#category').val(category);
     }
 
     $('#category').trigger('chosen:updated');
@@ -234,8 +283,20 @@
   $('.btn-danger').click(function() {
     if (confirm('Are you sure?')) {
       console.log('get and delete the event'); 
-      // TODO: remove the event
       $('.modal').modal('hide');
+
+
+      var date = $('#activityForm').data('date');
+      console.log('deleting: ' + date);
+      var result = $.grep(eventArray, function(e) { return e.date == date });   
+      result = result[0];
+      var index = eventArray.indexOf(result);
+      console.log('index is ' + index);
+      eventArray.splice(index, 1);
+      myCal.setEvents(eventArray);
+
+      // TODO: actually remove the event
+      saveEvents();
     }
   });
 
@@ -247,18 +308,55 @@
     var date = $('#activityForm').data('date');
 
     console.log('clicked save for date: ' + date)
+
+    // TODO: validation here
+
+    var hours = parseInt($('#hours').val());
+    var minutes = parseInt($('#minutes').val());
+    var category_id = $('#category').val();
+    var duration = (hours * 60) + minutes;
+
+    var event = {
+      date: date,
+      duration: duration,
+      category_id: category_id
+    }
+
+
     // TODO: toss into add edit methods
+
     if (inEditMode()) {
       console.log('update and save');
       // update events array [x]
+
+      var result = $.grep(eventArray, function(e) { return e.date == date });   
+      result = result[0];
+      var index = eventArray.indexOf(result);
+
+      eventArray[index] = event;
+
+      // TODO: actually update
     } else {
       // get implied date
       console.log('create new');
       // insert into events array[x]
+      // TODO: actually add the event
+      // myCal.setEvents(eventArray);
+      console.log('event array length ' + eventArray.length);
+
+      
+      console.log('duration is new' + duration);
+
+      eventArray.push(event);
+
+      // APPEND The array?
+      //myCal.addEvents(additionalEventsArray);
+      console.log('event array length after ' + eventArray.length);
     }
 
     // refresh calendar
-
+    myCal.setEvents(eventArray);
+    saveEvents();
     // TODO: validation
     $('.modal').modal('hide');
   });

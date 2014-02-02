@@ -18,4 +18,5 @@
 //= require underscore
 //= require clndr
 //= require bootstrap
+//= require modernizr
 //= require_tree .
