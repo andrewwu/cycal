@@ -61,17 +61,14 @@
                   <span class="clndr-day pull-right"><%%= day.day %></span>
 
                   <%% if (!_.isEmpty(day.events)) { %>
-                    <%% var category = categoryArray[day.events[0].category_id]; %>
+                    <%% var category = findCategoryById(day.events[0].category_id); %>
                     <div class="activity" style="background-color: <%%= category.color %>;">
-
                       <div class="duration">
                         <%%= day.events[0].duration / 60 + " h" %>
                       </div>
-
                       <div class="category">
                         <%%= category['label'] %>
                       </div>
-
                     </div>
                   <%% } %>
                 </div>
@@ -87,6 +84,31 @@
   
   </script>
 </div>
+
+<h2>Categories</h2>
+
+<div id="categories" data-bind="foreach: categories">
+  <div class="category">
+    <div class="category-color" data-bind="style: { backgroundColor: color }" style="height: 10px; width: 10px; float: left; margin-right: 10px;"></div>
+    <span data-bind="text: label"></span>
+    <a href="#" data-bind="click: $root.removeCategory">Remove</a>
+  </div>
+</div>
+  
+  <form role="form">
+    <div class="form-group">
+      <label for="label">New Category</label>
+      <input id="label" type="text" class="form-control" placeholder="New category label">
+    </div>
+    <div class="form-group">
+      <label for="color">Color</label>
+      <input id="color" type="text" class="form-control" placeholder="Hex code">
+    </div>
+    <button data-bind="click: addCategory" class="btn btn-default">Create</button>
+  </form>
+
+  <button class="btn btn-danger" id="pop-category">POP CATEGORY</button>
+
 </div>
 
 <!-- Modal -->
@@ -114,10 +136,7 @@
           <div class="form-group">
             <label for="category" class="col-sm-2 control-label">Category</label>
             <div class="col-sm-10">
-              <select id="category" class="form-control chosen-select">
-                <option value="0">Zone 2</option>
-                <option value="1">Sprint Workout</option>
-                <option value="2">Threshold Test</option>
+              <select data-bind="options: categories, optionsText: 'label', optionsValue: 'id'" id="category" class="form-control chosen-select">
               </select>
             </div>
           </div>
@@ -134,73 +153,119 @@
 </div><!-- /.modal -->
 
 
+
 <script>
-
-  // TODO: load and store this event array from localstorage
-/*
-
-  var categoryArray = [
-    { label: "Zone 2", color: "#A9E2F3" },
-    { label: "Sprint Workout", color: "#F5DA81" },
-    { label: "Threshold Test", color: "#F5A9A9" }
-  ]
-
-  var eventArray = [
-    { date: "2014-01-01", duration: 120, category_id: 0 },
-    { date: "2014-01-02", duration: 90, category_id: 0 },
-    { date: "2014-01-04", duration: 180, category_id: 0 },
-    { date: "2014-01-05", duration: 120, category_id: 0 },
-
-    { date: "2014-01-07", duration: 90, category_id: 0 },
-    { date: "2014-01-08", duration: 120, category_id: 0 },
-    { date: "2014-01-09", duration: 90, category_id: 0 },
-    { date: "2014-01-11", duration: 180, category_id: 0 },
-    { date: "2014-01-12", duration: 120, category_id: 0},
-
-    { date: "2014-01-14", duration: 90, category_id: 0 },
-    { date: "2014-01-15", duration: 120, category_id: 0 },
-    { date: "2014-01-16", duration: 90, category_id: 0 },
-    { date: "2014-01-18", duration: 120, category_id: 0 },
-    { date: "2014-01-19", duration: 120, category_id: 2 },
-
-    { date: "2014-01-21", duration: 120, category_id: 0 },
-    { date: "2014-01-22", duration: 120, category_id: 0 },
-    { date: "2014-01-23", duration: 90, category_id: 0 },
-    { date: "2014-01-25", duration: 270, category_id: 0 },
-    { date: "2014-01-26", duration: 180, category_id: 0 },
-
-    { date: "2014-01-28", duration: 120, category_id: 1 },
-    { date: "2014-01-29", duration: 150, category_id: 0 },
-    { date: "2014-01-30", duration: 120, category_id: 0 },
-
-    { date: "2014-02-01", duration: 300, category_id: 0 },
-    { date: "2014-02-02", duration: 180, category_id: 0 }
-  ];*/
-  
-
   var categoryArray = new Array();
   var eventArray = new Array();
+  var viewModel;
 
-  function loadEvents() {
+  var categoryIndex = 1;
+
+  function CategoriesViewModel(categories) {
+    var self = this;
+
+    self.categories = ko.observableArray(categories);
+    //selectedCategory : ko.observable()
+
+    self.addCategory = function() {
+      var label= $('input#label').val();
+      var color = $('input#color').val();
+      var category = { id: categoryIndex, label: label, color: color };
+      console.log('push ' + category.label + " " + category.color + "; id=" + categoryIndex);
+      // remember to always increment after adding; this is the only time to do so
+      categoryIndex += 1;
+      self.categories.push(category);
+      console.log(categoryArray);
+      save();
+    }
+
+    self.removeCategory = function(category) {
+      // TODO: check if any events are linked to the category
+
+      var associatedEvents = findEventsByCategoryId(category.id);
+
+      if (associatedEvents.length > 0) {
+        alert("There are events associated with this category. Please reassign them first.");
+        return;
+      }
+
+      if (confirm('Are you sure you want to delete the category: ' + category.label + '?')) {
+        self.categories.remove(category);
+        console.log(category.label + " removed");
+        save();
+      }
+    }
+  }; 
+
+  $(function() {
+    loadFromStorage();
+
+    viewModel = new CategoriesViewModel(categoryArray);
+
+    ko.applyBindings(viewModel);
+    console.log('category index is : ' + categoryIndex);
+
+    // specific order necessary: we load viewmodel first and then load events
+    // since findCategoryById needs the viewmodel setup to before underscore template for
+    // event calendar can run w/o errorss
+    myCal.setEvents(eventArray);
+  });
+
+  // TODO: after loading category array
+  // gets the highest category id and sets the category index
+  function setCategoryIndex() {
+    var max = 1;
+
+    for (var i = 0; i < categoryArray.length; i++) {
+      var id = parseInt(categoryArray[i].id)
+      if (id > max) {
+        max = id;
+      }
+    }
+
+    categoryIndex = max + 1;
+  }
+
+  function findEventsByCategoryId(category_id) {
+    var result = $.grep(eventArray, function(e) { return e.category_id == category_id; });
+    return result;
+  }
+
+  function findCategoryById(id) {
+    var result = $.grep(viewModel.categories(), function(e) { return e.id == id; });
+    //console.log(result);
+
+    if (result.length == 0) {
+      return false
+    } else if (result.length == 1) {
+      //found it
+      return result[0];
+    } else {
+      // multiple items found this should never happen since ids are guaranteed to be unique
+      console.log('findCategoryById: ERROR - found multiple categories for id ' + id);
+    }
+  }
+
+  function loadFromStorage() {
     if (!Modernizr.localstorage) { return false; }
 
-
     // TODO: change these to constant keys
-    if (localStorage['events'] !== null && localStorage['categories'] !== null) {
+
+    // should this be OR?
+    if (localStorage['events'] !== undefined && localStorage['categories'] !== undefined) {
       console.log('events exist');
       eventArray = JSON.parse(localStorage['events']);
       categoryArray = JSON.parse(localStorage['categories']);
-      myCal.setEvents(eventArray);
+
+      setCategoryIndex(); 
+
     } else {
       // no previous data
     }
   }
 
-  $(function() {
-    loadEvents();
-  });
 
-  function saveEvents() {
+  function save() {
     if (Modernizr.localstorage) {
       localStorage['events'] = JSON.stringify(eventArray);
       localStorage['categories'] = JSON.stringify(categoryArray);
@@ -220,7 +285,6 @@
     weekOffset: 1 
   });
 
-
   $(document).on('click', '[data-toggle="modal"]', function() {
     var event = $(this).hasClass('event');
 
@@ -238,7 +302,6 @@
       // new event
       console.log('no event'); 
       setModalMode('new');
-
     }
   });
 
@@ -280,7 +343,7 @@
     console.log("mode is " + $('#activityForm').data('mode'));
   }
 
-  $('.btn-danger').click(function() {
+  $('.modal-footer .btn-danger').click(function() {
     if (confirm('Are you sure?')) {
       console.log('get and delete the event'); 
       $('.modal').modal('hide');
@@ -296,7 +359,7 @@
       myCal.setEvents(eventArray);
 
       // TODO: actually remove the event
-      saveEvents();
+      save();
     }
   });
 
@@ -313,7 +376,7 @@
 
     var hours = parseInt($('#hours').val());
     var minutes = parseInt($('#minutes').val());
-    var category_id = $('#category').val();
+    var category_id = parseInt($('#category').val()); // #TODO: make this an integer
     var duration = (hours * 60) + minutes;
 
     var event = {
@@ -356,7 +419,7 @@
 
     // refresh calendar
     myCal.setEvents(eventArray);
-    saveEvents();
+    save();
     // TODO: validation
     $('.modal').modal('hide');
   });
