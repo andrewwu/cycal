@@ -62,12 +62,12 @@
 
                   <%% if (!_.isEmpty(day.events)) { %>
                     <%% var category = findCategoryById(day.events[0].category_id); %>
-                    <div class="activity" style="background-color: <%%= category.color %>;">
+                    <div class="activity" style="background-color: <%%= category.color() %>;">
                       <div class="duration">
                         <%%= day.events[0].duration / 60 + " h" %>
                       </div>
                       <div class="category">
-                        <%%= category['label'] %>
+                        <%%= category.label() %>
                       </div>
                     </div>
                   <%% } %>
@@ -90,7 +90,9 @@
 <div id="categories" data-bind="foreach: categories">
   <div class="category">
     <div class="category-color" data-bind="style: { backgroundColor: color }" style="height: 10px; width: 10px; float: left; margin-right: 10px;"></div>
-    <span data-bind="text: label"></span>
+    <span data-bind="visible: !editing(), text: label, click: edit"></span>
+    <input data-bind="visible: editing, value: label, hasFocus: editing">
+
     <a href="#" data-bind="click: $root.removeCategory">Remove</a>
   </div>
 </div>
@@ -161,6 +163,24 @@
 
   var categoryIndex = 1;
 
+  function CategoryViewModel(id, label, color) {
+    this.id = id;
+    this.label = ko.observable(label);
+    this.color = ko.observable(color);
+
+    this.editing = ko.observable(false);
+
+    this.editing.subscribe(function(editing) {
+      if (!editing) {
+        // #TODO: validation cant be blank
+        save();
+        myCal.setEvents(eventArray);
+      }
+    });
+
+    this.edit = function() { console.log("HI");this.editing(true) }
+  }
+
   function CategoriesViewModel(categories) {
     var self = this;
 
@@ -170,7 +190,9 @@
     self.addCategory = function() {
       var label= $('input#label').val();
       var color = $('input#color').val();
-      var category = { id: categoryIndex, label: label, color: color };
+      var category = new CategoryViewModel(categoryIndex, label, color);
+
+      //{ id: categoryIndex, label: label, color: color };
       console.log('push ' + category.label + " " + category.color + "; id=" + categoryIndex);
       // remember to always increment after adding; this is the only time to do so
       categoryIndex += 1;
@@ -200,7 +222,17 @@
   $(function() {
     loadFromStorage();
 
-    viewModel = new CategoriesViewModel(categoryArray);
+    categoryModels = new Array();
+
+    // TODO: change to a $.each ?
+    for (var i = 0; i < categoryArray.length; i++) {
+      console.log(i);
+      category = categoryArray[i];
+      categoryModels.push(new CategoryViewModel(category.id, category.label, category.color));
+    }
+
+
+    viewModel = new CategoriesViewModel(categoryModels);
 
     ko.applyBindings(viewModel);
     console.log('category index is : ' + categoryIndex);
@@ -233,7 +265,6 @@
 
   function findCategoryById(id) {
     var result = $.grep(viewModel.categories(), function(e) { return e.id == id; });
-    //console.log(result);
 
     if (result.length == 0) {
       return false
@@ -268,7 +299,9 @@
   function save() {
     if (Modernizr.localstorage) {
       localStorage['events'] = JSON.stringify(eventArray);
-      localStorage['categories'] = JSON.stringify(categoryArray);
+
+      // TODO: stringify? get rid of edit key too
+      localStorage['categories'] = ko.toJSON(viewModel.categories());//JSON.stringify(categoryArray);
     } else {
       // TODO: no localstorage support
     }
