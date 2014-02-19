@@ -89,12 +89,15 @@
 
 <div id="categories" data-bind="foreach: categories">
   <div class="category">
-    <div class="category-color" data-bind="style: { backgroundColor: color }" style="height: 10px; width: 10px; float: left; margin-right: 10px;"></div>
+    <div style="height: 10px; width: 10px; margin-right: 10px; float: left;" class="category-color" data-bind="style: { backgroundColor: color }, click: editColor">
+    </div>
+
     <span data-bind="visible: !editing(), text: label, click: edit"></span>
     <input data-bind="visible: editing, value: label, hasFocus: editing">
 
     <a href="#" data-bind="click: $root.removeCategory">Remove</a>
   </div>
+  <input data-bind="visible: editingColor, value: color, hasFocus: editingColor">
 </div>
   
   <form role="form">
@@ -168,6 +171,8 @@
     this.label = ko.observable(label);
     this.color = ko.observable(color);
 
+    this.editingColor = ko.observable(false);
+    this.editColor = function() { this.editingColor(true) }
     this.editing = ko.observable(false);
 
     this.editing.subscribe(function(editing) {
@@ -178,7 +183,17 @@
       }
     });
 
-    this.edit = function() { console.log("HI");this.editing(true) }
+    this.edit = function() { this.editing(true) }
+
+
+
+    this.editingColor.subscribe(function(editing) {
+      console.log("clicked");
+      if (!editing) {
+        save();
+        myCal.setEvents(eventArray);
+      }
+    });
   }
 
   function CategoriesViewModel(categories) {
