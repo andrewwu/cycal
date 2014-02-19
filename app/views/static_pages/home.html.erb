@@ -226,7 +226,7 @@
         return;
       }
 
-      if (confirm('Are you sure you want to delete the category: ' + category.label + '?')) {
+      if (confirm('Are you sure you want to delete the category: ' + category.label() + '?')) {
         self.categories.remove(category);
         console.log(category.label + " removed");
         save();
