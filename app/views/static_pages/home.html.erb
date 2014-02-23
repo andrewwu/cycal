@@ -111,9 +111,6 @@
     </div>
     <button data-bind="click: addCategory" class="btn btn-default">Create</button>
   </form>
-
-  <button class="btn btn-danger" id="pop-category">POP CATEGORY</button>
-
 </div>
 
 <!-- Modal -->
@@ -179,7 +176,7 @@
       if (!editing) {
         // #TODO: validation cant be blank
         save();
-        myCal.setEvents(eventArray);
+        refresh();
       }
     });
 
@@ -191,7 +188,7 @@
       console.log("clicked");
       if (!editing) {
         save();
-        myCal.setEvents(eventArray);
+        refresh();
       }
     });
   }
@@ -255,7 +252,7 @@
     // specific order necessary: we load viewmodel first and then load events
     // since findCategoryById needs the viewmodel setup to before underscore template for
     // event calendar can run w/o errorss
-    myCal.setEvents(eventArray);
+    refresh();
   });
 
   // TODO: after loading category array
@@ -310,6 +307,9 @@
     }
   }
 
+  function refresh() {
+    myCal.setEvents(eventArray);
+  }
 
   function save() {
     if (Modernizr.localstorage) {
@@ -404,7 +404,7 @@
       var index = eventArray.indexOf(result);
       console.log('index is ' + index);
       eventArray.splice(index, 1);
-      myCal.setEvents(eventArray);
+      refresh();
 
       // TODO: actually remove the event
       save();
@@ -433,29 +433,20 @@
       category_id: category_id
     }
 
-
     // TODO: toss into add edit methods
 
     if (inEditMode()) {
       console.log('update and save');
       // update events array [x]
-
       var result = $.grep(eventArray, function(e) { return e.date == date });   
       result = result[0];
       var index = eventArray.indexOf(result);
-
       eventArray[index] = event;
-
-      // TODO: actually update
     } else {
       // get implied date
       console.log('create new');
       // insert into events array[x]
-      // TODO: actually add the event
-      // myCal.setEvents(eventArray);
       console.log('event array length ' + eventArray.length);
-
-      
       console.log('duration is new' + duration);
 
       eventArray.push(event);
@@ -465,8 +456,7 @@
       console.log('event array length after ' + eventArray.length);
     }
 
-    // refresh calendar
-    myCal.setEvents(eventArray);
+    refresh();
     save();
     // TODO: validation
     $('.modal').modal('hide');
