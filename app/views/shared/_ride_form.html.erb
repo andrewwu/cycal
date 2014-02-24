@@ -1,0 +1,39 @@
+<div class="modal fade" id="activityForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">New Ride</h4>
+      </div>
+
+      <div class="modal-body">
+        <form class="form-horizontal" role="form">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Duration</label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input id="hours" type="text" class="form-control">
+                <span class="input-group-addon">h</span>
+                <input id="minutes" type="text" class="form-control">
+                <span class="input-group-addon">m</span>
+              </div>  
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category" class="col-sm-2 control-label">Category</label>
+            <div class="col-sm-10">
+              <select data-bind="options: categories, optionsText: 'label', optionsValue: 'id'" id="category" class="form-control chosen-select">
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger pull-left">Delete</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
