@@ -48,7 +48,6 @@ function CategoriesViewModel(categories) {
     var color = $('input#color').val();
     var category = new CategoryViewModel(categoryIndex, label, color);
 
-    // remember to always increment after adding; this is the only time to do so
     categoryIndex += 1;
     self.categories.push(category);
     save();
@@ -71,18 +70,17 @@ function CategoriesViewModel(categories) {
 
 // ON LOAD
 $(function() {
-  $('.chosen-select').chosen({ width: '100%' });
+  $('.js-chosen-select').chosen({ width: '100%' });
 
-  calendar = $('.calendar').clndr({
+  calendar = $('.js-calendar').clndr({
     daysOfTheWeek: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     template: $('#template-calendar').html(),
     events: eventArray,
     weekOffset: 1
   });
 
-  // TODO: more descriptive binding
-  $('.btn-primary').click(function() {
-    var date = $('#activityForm').data('date');
+  $('.js-save-ride').click(function() {
+    var date = $('.js-ride-form').data('date');
 
     // TODO: validation here in another function
 
@@ -107,15 +105,15 @@ $(function() {
 
     refresh();
     save();
-    $('.modal').modal('hide');
+    $('.js-ride-form').modal('hide');
   });
 
   // TODO: more descriptive binding
-  $('.modal-footer .btn-danger').click(function() {
+  $('.js-delete-ride').click(function() {
     if (confirm('Are you sure?')) {
-      $('.modal').modal('hide');
+      $('.js-ride-form').modal('hide');
 
-      var date = $('#activityForm').data('date');
+      var date = $('.js-ride-form').data('date');
       var result = findEventByDate(date)
 
       var index = eventArray.indexOf(result);
@@ -208,14 +206,13 @@ function refresh() {
 }
 
 // MODAL
-// TODO: more descriptive binding
-$(document).on('click', '[data-toggle="modal"]', function() {
+$(document).on('click', '.js-new-ride', function() {
   var event = $(this).hasClass('event');
-  $('#activityForm').data('date', $(this).data('date'));
+  $('.js-ride-form').data('date', $(this).data('date'));
 
   if (event) {
     var index = parseInt($(this).data('index'));
-    $('.modal').data('mode', 'edit');
+    $('.js-ride-form').data('mode', 'edit');
     setModalMode('edit');
   } else {
     setModalMode('new');
@@ -223,18 +220,18 @@ $(document).on('click', '[data-toggle="modal"]', function() {
 });
 
 function setModalMode(mode) {
-  $('#activityForm').data('mode', mode);
+  $('.js-ride-form').data('mode', mode);
 
   if (mode == 'new') {
-    $('.btn-danger').hide();
+    $('.js-delete-ride').hide();
     $('#hours').val('');
     $('#minutes').val('');
     $('#category').val('0');
   } else {
     // edit mode
-    $('.btn-danger').show();
+    $('.js-delete-ride').show();
 
-    var date = $('#activityForm').data('date');
+    var date = $('.js-ride-form').data('date');
     var result = findEventByDate(date);
 
     var hours = Math.floor(result.duration / 60);
@@ -246,9 +243,9 @@ function setModalMode(mode) {
     $('#category').val(category);
   }
 
-  $('#category').trigger('chosen:updated');
+  $('.js-chosen-select').trigger('chosen:updated');
 }
 
 function inEditMode() {
-  return $('.modal').data('mode') == 'edit';
+  return $('.js-ride-form').data('mode') == 'edit';
 }

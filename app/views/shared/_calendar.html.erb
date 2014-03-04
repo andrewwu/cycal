@@ -52,7 +52,7 @@
             <%% _.each(days, function(day, index) { %>
               <%% //console.log('index is ' + index); %>
 
-              <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %>" data-index="<%%= index %>" data-toggle="modal" data-target="#activityForm" data-date="<%%= day.date.format('GGGG-MM-DD') %>">
+              <div class="<%%= day.classes %> <%%= day.date.format('ddd').toLowerCase() %> js-new-ride" data-index="<%%= index %>" data-toggle="modal" data-target="#ride-form" data-date="<%%= day.date.format('GGGG-MM-DD') %>">
                 <span class="options"></span>
                 <span class="clndr-day pull-right"><%%= day.day %></span>
 
