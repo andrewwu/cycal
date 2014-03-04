@@ -82,11 +82,13 @@ $(function() {
   $('.js-save-ride').click(function() {
     var date = $('.js-ride-form').data('date');
 
-    // TODO: validation here in another function
+    var hours = parseInt($('#hours').val()) || 0;
+    var minutes = parseInt($('#minutes').val()) || 0;
+    var category_id = parseInt($('#category').val());
 
-    var hours = parseInt($('#hours').val());
-    var minutes = parseInt($('#minutes').val());
-    var category_id = parseInt($('#category').val()); // #TODO: make this an integer
+    if (!validateDuration(hours, minutes)) { return; }
+    if (!validateLabel(category_id)) { return; }
+
     var duration = (hours * 60) + minutes;
 
     var event = {
@@ -138,6 +140,38 @@ $(function() {
 });
 
 // HELPERS
+function validateDuration(hours, minutes) {
+  var error = '';
+
+  if (hours > 24) {
+    error = 'Duration can\'t exceed 24 hours';
+  } else if (minutes > 59) {
+    error = 'Minutes can\'t exceed 59';
+  } else if (hours == 24 && minutes > 0) {
+    error = 'Duration can\'t exceed 24 hours';
+  } else if (hours == 0 && minutes == 0) {
+    error = 'Duration can\'t be blank';
+  } else if (hours < 0 || minutes < 0) {
+    error = 'Duration can\'t be negative';
+  }
+
+  if (error.length) {
+    alert(error);
+    return false;
+  }
+
+  return true;
+}
+
+function validateLabel(id) {
+  if (!findCategoryById(id)) {
+    alert('Label must be valid');
+    return false;
+  }
+
+  return true;
+}
+
 function setCategoryIndex() {
   var max = 1;
 

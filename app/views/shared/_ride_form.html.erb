@@ -12,15 +12,15 @@
             <label for="inputEmail3" class="col-sm-2 control-label">Duration</label>
             <div class="col-sm-10">
               <div class="input-group">
-                <input id="hours" type="text" class="form-control">
+                <input id="hours" type="text" class="form-control" placeholder="0">
                 <span class="input-group-addon">h</span>
-                <input id="minutes" type="text" class="form-control">
+                <input id="minutes" type="text" class="form-control" placeholder="0">
                 <span class="input-group-addon">m</span>
               </div>  
             </div>
           </div>
           <div class="form-group">
-            <label for="category" class="col-sm-2 control-label">Category</label>
+            <label for="category" class="col-sm-2 control-label">Label</label>
             <div class="col-sm-10">
               <select data-bind="options: categories, optionsText: 'label', optionsValue: 'id'" id="category" class="form-control js-chosen-select">
               </select>
