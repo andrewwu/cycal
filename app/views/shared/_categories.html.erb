@@ -1,28 +1,48 @@
-<h2>Categories</h2>
+<div class="row">
+  <div class="col-md-12" style="margin-top: 20px;">
+    <button class="btn btn-primary">Manage Labels</button>
+  </div>
+</div>
+
+<h2>Manage Labels</h2>
 
 <div id="categories" data-bind="foreach: categories">
-  <div class="category">
-    <div style="height: 10px; width: 10px; margin-right: 10px; float: left;" class="category-color" data-bind="style: { backgroundColor: color }, click: editColor">
+  <div class="category" style="margin-bottom: 7px; width: 200px;">
+    <!--
+    <div style="height: 12px; width: 12px; margin-right: 10px; margin-top: 5px; border-radius: 20px; float: left;" class="category-color" data-bind="style: { backgroundColor: color }, click: editColor">
+     --> 
+
+
+    <div style="width: 150px; float: left;">
+      <input class="js-color-picker" type="text" data-bind="value: color">
+      <span data-bind="visible: !editing(), text: label, click: edit"></span>
+      <input data-bind="visible: editing, value: label, hasFocus: editing">
     </div>
 
-    <span data-bind="visible: !editing(), text: label, click: edit"></span>
-    <input data-bind="visible: editing, value: label, hasFocus: editing">
-
-    <a href="#" data-bind="click: $root.removeCategory">Remove</a>
+    <div class="float: left;">
+      <a href="#" data-bind="click: $root.removeCategory">
+        <span class="glyphicon glyphicon-remove"></span>
+      </a>
+    </div>
   </div>
-  <input data-bind="visible: editingColor, value: color, hasFocus: editingColor">
 </div>
   
 <form role="form">
-  <div class="form-group">
-    <label for="label">New Category</label>
-    <input id="label" type="text" class="form-control" placeholder="New category label">
+
+  <div class="input-group">
+    <input id="label" type="text" class="form-control" placeholder="Label name">
+    <span class="input-group-addon">
+      <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
+    </span>
   </div>
 
-  <div class="form-group">
-    <label for="color">Color</label>
-    <input id="color" type="text" class="form-control" placeholder="Hex code">
+<!--  <div class="form-group">
+    <div class="input-group">
+      <input type="text" class="form-control">
+      <span class="input-group-addon">.00</span>
+    </div>
   </div>
+-->
 
   <button data-bind="click: addCategory" class="btn btn-default">Create</button>
 </form>

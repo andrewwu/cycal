@@ -1,35 +1,21 @@
 @import "bootstrap";
 @import "bootstrap-chosen";
-/*
-<style type="text/css">
-  .cal-1 {
-    width: 84%;
-  }
+@import "spectrum";
 
-  .day, .header-day {
-    width: 12%;
-    display: inline-block;
-    padding: 10px;
-  }
+// COLOR PICKER
 
-  .day {
-    height: 60px;
-  }
-</style>
-*/
+.input-group-addon {
+  width: 75px;
+  padding: 2px 12px;
 
-div {
-//  border: 1px solid black;
+  .sp-replacer {
+    border: none;
+  }
 }
 
 .clndr-day {
-  //margin: 10px 10px 0 0;
   line-height: 14px;
   color: $gray-light;
-}
-
-.clndr-controls {
-//  margin: 50px 0 20px;
 }
 
 div.day, div.header-day {

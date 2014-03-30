@@ -20,4 +20,5 @@
 //= require bootstrap
 //= require modernizr
 //= require knockout-3.0.0
+//= require spectrum
 //= require_tree .

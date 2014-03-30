@@ -18,9 +18,6 @@ function CategoryViewModel(id, label, color) {
   this.editing = ko.observable(false);
   this.edit = function() { this.editing(true) }
 
-  this.editingColor = ko.observable(false);
-  this.editColor = function() { this.editingColor(true) }
-
   this.editing.subscribe(function(editing) {
     if (!editing) {
       // TODO: validate category label
@@ -29,12 +26,10 @@ function CategoryViewModel(id, label, color) {
     }
   });
 
-  this.editingColor.subscribe(function(editing) {
-    if (!editing) {
-      // TODO: validate category color
-      save();
-      refresh();
-    }
+  this.color.subscribe(function(newValue) {
+    // TODO: validate category color
+    save();
+    refresh();
   });
 }
 
@@ -51,6 +46,7 @@ function CategoriesViewModel(categories) {
     categoryIndex += 1;
     self.categories.push(category);
     save();
+    executeSpectrum();
   }
 
   self.removeCategory = function(category) {
@@ -137,7 +133,22 @@ $(function() {
   viewModel = new CategoriesViewModel(categoryModels);
   ko.applyBindings(viewModel);
   refresh();
+
+  executeSpectrum();
 });
+
+function executeSpectrum() {
+  $('.js-color-picker').spectrum({
+    preferredFormat: "hex",
+    showInput: true,
+    showPalette: true,
+    palette: [
+      ['black', 'white', 'blanchedalmond',
+      'rgb(255, 128, 0);', 'hsv 100 70 50'],
+      ['red', 'yellow', 'green', 'blue', 'violet']
+    ]
+  });
+}
 
 // HELPERS
 function validateDuration(hours, minutes) {
