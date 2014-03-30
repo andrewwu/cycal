@@ -25,6 +25,10 @@
   color: $gray-light;
 }
 
+div.day.today {
+  background: yellow;
+}
+
 div.day, div.header-day {
   width: 14.2857%;
   float: left;
