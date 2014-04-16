@@ -1,23 +1,24 @@
 <script type="text/template" id="template-calendar">
   <div class="row">
-    <div class="col-md-6">
-      <div class="clndr-controls btn-group">
+    <div class="col-md-12">
+      <div class="clndr-controls">
 
-        <div class="clndr-previous-button btn btn-default">
-          <span class="glyphicon glyphicon-chevron-left"></span>
-        </div>
+        <div class="month"><%%= month + " " + year %></div>
 
-        <div class="month btn btn-default"><%%= month + " " + year %></div>
-
-        <div class="clndr-next-button btn btn-default">
-          <span class="glyphicon glyphicon-chevron-right"></span>
+        <div class="pull-right">
+          <div class="clndr-previous-button">
+            <span class="glyphicon glyphicon-chevron-left btn"></span>
+          </div>
+          <div class="clndr-next-button">
+            <span class="glyphicon glyphicon-chevron-right btn"></span>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-2" id="goals">
       <div class="goal-header">Weekly Goals</div>
       <div class="goals">
 
@@ -38,7 +39,7 @@
       </div>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-10" id="cal">
       <div class="clndr-grid">
         <div class="days-of-the-week">
           <%% //console.log(_.size(days)); %>

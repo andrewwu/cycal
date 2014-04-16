@@ -6,18 +6,91 @@
 
 .navbar-brand {
   font-family: 'Yellowtail', cursive;
-  font-size: 36px;
+  font-size: 24px;
 }
 
-// COLOR PICKER
+body {
+  padding-bottom: 100px;
+}
+// CATEGORIES
 
-.input-group-addon {
-  width: 75px;
-  padding: 2px 12px;
+h2.labels {
+  font-size: 20px;
+}
 
-  .sp-replacer {
-    border: none;
+#categories .category, form.add-category {
+  padding: 7px 10px;
+  width: 365px;
+
+  div {
+    display: inline-block;
   }
+
+  div.name {
+    margin-left: 10px;
+    width: 200px;
+
+    span {
+      padding: 4px;
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
+
+  div.action {
+    margin-left: 7px;
+  }
+}
+
+div.action a {
+  margin-left: 27px;
+}
+
+#categories .category:nth-child(odd) {
+  background: #F5F5F5;
+}
+
+#categories .category:last-child {
+  margin-bottom: 5px;
+}
+
+form.add-category {
+  padding-top: 11px;
+  border-top: 3px dotted #EBEBEB;
+}
+
+/* CALENDAR */
+
+.clndr-previous-button, .clndr-next-button {
+  cursor: pointer;
+  display: inline-block;
+  color: white;
+
+  .btn:hover {
+    color: #ffd012;
+  }
+}
+
+.clndr-controls {
+  background: #7a7a7a;
+  padding: 10px 5px 10px 15px;
+  border-left: 2px solid white;
+  border-right: 3px solid white;
+  border-bottom: 2px solid white;
+}
+
+.month {
+  display: inline-block;
+  font-size: 22px;
+  color: white;
+}
+
+#cal {
+  padding-left: 0;
+}
+
+#goals {
+  padding-right: 0;
 }
 
 .clndr-day {
@@ -26,7 +99,7 @@
 }
 
 div.day.today {
-  background: yellow;
+  background: #ffdcb3;
 }
 
 div.day, div.header-day {
@@ -41,10 +114,29 @@ div.day, div.header-day {
   padding: 10px;
 }
 
+.goal-header, .header-day {
+  background: #7a7a7a;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.goal-header {
+  border-left: 2px solid white;
+  //border-right: 2px solid white;
+}
+
+.header-day:first-child {
+  border-left: 2px solid white;
+}
+
+.header-day:nth-child(7) {
+  border-right: 2px solid white;
+}
+
 .goal {
   padding: 10px;
-  background: #bdd286;
-  border-bottom: 1px solid $gray;
+  background: #c4ebf2;//#ffd75e;
+  border-bottom: 2px solid white;//$gray;
   text-align: center;
   font-size: 16px;
   padding-top: 45px;
@@ -72,18 +164,25 @@ div.activity {
   padding: 7px;
   margin-top: 23px;
   text-align: center;
-  border: 1px solid $gray;
+//  border: 1px solid $gray;
   min-height: 70px;
 }
 
 .days, .goals {
-  border: 1px solid $gray;
-  border-radius: 4px;
+  border: 2px solid white; //$gray;
+ // border-radius: 4px;
+}
+
+.goals {
+  border-right: none;
 }
 
 .day {
-  border-right: 1px solid $gray;
-  border-bottom: 1px solid $gray;
+  //border-right: 1px solid $gray;
+  //border-bottom: 1px solid $gray;
+  border-right: 2px solid white;
+  border-bottom: 2px solid white;
+  background: #ebebeb;
 }
 
 /*

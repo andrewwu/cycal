@@ -1,25 +1,17 @@
-<div class="row">
-  <div class="col-md-12" style="margin-top: 20px;">
-    <button class="btn btn-primary">Manage Labels</button>
-  </div>
-</div>
-
-<h2>Manage Labels</h2>
+<h2 class="labels">Manage Labels</h2>
 
 <div id="categories" data-bind="foreach: categories">
-  <div class="category" style="margin-bottom: 7px; width: 200px;">
-    <!--
-    <div style="height: 12px; width: 12px; margin-right: 10px; margin-top: 5px; border-radius: 20px; float: left;" class="category-color" data-bind="style: { backgroundColor: color }, click: editColor">
-     --> 
-
-
-    <div style="width: 150px; float: left;">
+  <div class="category">
+    <div class="picker">
       <input class="js-color-picker" type="text" data-bind="value: color">
+    </div>
+
+    <div class="name">
       <span data-bind="visible: !editing(), text: label, click: edit"></span>
       <input data-bind="visible: editing, value: label, hasFocus: editing">
     </div>
 
-    <div class="float: left;">
+    <div class="action">
       <a href="#" data-bind="click: $root.removeCategory">
         <span class="glyphicon glyphicon-remove"></span>
       </a>
@@ -27,22 +19,14 @@
   </div>
 </div>
   
-<form role="form">
-
-  <div class="input-group">
+<form class="add-category form-inline" role="form">
+  <div class="picker">
+    <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
+  </div>
+  <div class="name">
     <input id="label" type="text" class="form-control" placeholder="Label name">
-    <span class="input-group-addon">
-      <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
-    </span>
   </div>
-
-<!--  <div class="form-group">
-    <div class="input-group">
-      <input type="text" class="form-control">
-      <span class="input-group-addon">.00</span>
-    </div>
+  <div class="action">
+    <button data-bind="click: addCategory" class="btn btn-default">Create</button>
   </div>
--->
-
-  <button data-bind="click: addCategory" class="btn btn-default">Create</button>
 </form>

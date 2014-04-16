@@ -15,6 +15,7 @@
 <body>
 
   <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -26,39 +27,25 @@
       <a class="navbar-brand" href="#">cycal</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Dashboard</a></li>
-        <li><a href="#">Training</a></li>
-        <!--
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
-        -->
-      </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Andrew <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <!--<li><a href="#">My Profile</a></li>-->
-            <li><a href="#">Settings</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Sign Out</a></li>
-          </ul>
+        <li>
+          <button type="button" class="btn btn-default navbar-btn">Sign in</button>
         </li>
       </ul>
-    </div><!-- /.navbar-collapse -->
+    </div>
+  </div>
+
   </nav>
+
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>Lorem ipsum dolor sit amet.</h1>
+    <p>Praesent nisl nunc, molestie non mauris at, tempus rutrum lorem.</p>
+    <p><a class="btn btn-primary btn-lg" role="button">Sign up</a></p>
+  </div>
+</div>
 
 
 <%= yield %>
