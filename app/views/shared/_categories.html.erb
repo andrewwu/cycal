@@ -1,32 +1,44 @@
-<h2 class="labels">Manage Labels</h2>
+<div class="modal fade" id="js-manage-tags" tabindex="-1" role="dialog" aria-labelledby="manage-tags" aria-hidden="true">
 
-<div id="categories" data-bind="foreach: categories">
-  <div class="category">
-    <div class="picker">
-      <input class="js-color-picker" type="text" data-bind="value: color">
-    </div>
+  <div class="modal-dialog manage-tags">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Manage Tags</h2>
+      </div>
 
-    <div class="name">
-      <span data-bind="visible: !editing(), text: label, click: edit"></span>
-      <input data-bind="visible: editing, value: label, hasFocus: editing">
-    </div>
+      <div class="modal-body">
+        <div id="categories" data-bind="foreach: categories">
+          <div class="category">
+            <div class="picker">
+              <input class="js-color-picker" type="text" data-bind="value: color">
+            </div>
 
-    <div class="action">
-      <a href="#" data-bind="click: $root.removeCategory">
-        <span class="glyphicon glyphicon-remove"></span>
-      </a>
+            <div class="name">
+              <span data-bind="visible: !editing(), text: label, click: edit"></span>
+              <input data-bind="visible: editing, value: label, hasFocus: editing">
+            </div>
+
+            <div class="action">
+              <a href="#" data-bind="click: $root.removeCategory">
+                <span class="glyphicon glyphicon-remove"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <form class="add-category form-inline" role="form">
+          <div class="picker">
+            <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
+          </div>
+          <div class="name">
+            <input id="label" type="text" class="form-control" placeholder="Label name">
+          </div>
+          <div class="action">
+            <button data-bind="click: addCategory" class="btn btn-default">Create</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </div>
-  
-<form class="add-category form-inline" role="form">
-  <div class="picker">
-    <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
-  </div>
-  <div class="name">
-    <input id="label" type="text" class="form-control" placeholder="Label name">
-  </div>
-  <div class="action">
-    <button data-bind="click: addCategory" class="btn btn-default">Create</button>
-  </div>
-</form>

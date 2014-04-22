@@ -14,6 +14,10 @@ body {
 }
 // CATEGORIES
 
+.manage-tags.modal-dialog {
+  width: 407px;
+}
+
 h2.labels {
   font-size: 20px;
 }
@@ -38,12 +42,12 @@ h2.labels {
   }
 
   div.action {
-    margin-left: 7px;
+    margin-left: 19px;
   }
 }
 
 div.action a {
-  margin-left: 27px;
+  margin-left: 44px;
 }
 
 #categories .category:nth-child(odd) {
@@ -56,10 +60,20 @@ div.action a {
 
 form.add-category {
   padding-top: 11px;
+  padding-right: 0;
   border-top: 3px dotted #EBEBEB;
+
+  input#label {
+    width: 213px;
+  }
 }
 
 /* CALENDAR */
+
+button.manage-tags {
+  position: relative;
+  top: 1px;
+}
 
 .clndr-previous-button, .clndr-next-button {
   cursor: pointer;
