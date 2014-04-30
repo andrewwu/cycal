@@ -32,11 +32,18 @@
         <%% _.each(days, function(day, index) { %>
 
           <%% if (!_.isEmpty(day.events)) { %>
-            <%% weekly_total += (day.events[0].duration / 60); %>
+            <%% weekly_total += day.events[0].duration; %>
           <%% } %>
 
           <%% if ((index + 1) % 7 == 0 && index != 0) { %>
-            <div class="goal"><%%= weekly_total + ' hours' %></div>
+            <div class="goal">
+              <%%= Math.floor(weekly_total / 60) + ' hours' %>
+              <%% if (weekly_total % 60 > 0) { %>
+                <%% minute_label = (weekly_total % 60 > 1) ? "mins" : "min"; %>
+                <%%= weekly_total % 60 + " " + minute_label %>
+              <%% } %>
+
+            </div>
             <%% weekly_total = 0; %>
           <%% } %>
         <%% }); %>
@@ -67,7 +74,10 @@
                   <div class="activity" style="background-color: <%%= category.color() %>;">
                     <%% if (day.events[0].duration > 0) { %>
                       <div class="duration">
-                        <%%= day.events[0].duration / 60 + " h" %>
+                        <%%= Math.floor(day.events[0].duration / 60) + " h" %>
+                        <%% if (day.events[0].duration % 60 > 0) { %>
+                          <%%= day.events[0].duration % 60 + " m" %>
+                        <%% } %>
                       </div>
                     <%% } %>
                     <div class="category">
