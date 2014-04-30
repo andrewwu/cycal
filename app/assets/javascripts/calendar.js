@@ -160,8 +160,6 @@ function validateDuration(hours, minutes) {
     error = 'Minutes can\'t exceed 59';
   } else if (hours == 24 && minutes > 0) {
     error = 'Duration can\'t exceed 24 hours';
-  } else if (hours == 0 && minutes == 0) {
-    error = 'Duration can\'t be blank';
   } else if (hours < 0 || minutes < 0) {
     error = 'Duration can\'t be negative';
   }

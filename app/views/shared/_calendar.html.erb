@@ -65,9 +65,11 @@
                 <%% if (!_.isEmpty(day.events)) { %>
                   <%% var category = findCategoryById(day.events[0].category_id); %>
                   <div class="activity" style="background-color: <%%= category.color() %>;">
-                    <div class="duration">
-                      <%%= day.events[0].duration / 60 + " h" %>
-                    </div>
+                    <%% if (day.events[0].duration > 0) { %>
+                      <div class="duration">
+                        <%%= day.events[0].duration / 60 + " h" %>
+                      </div>
+                    <%% } %>
                     <div class="category">
                       <%%= category.label() %>
                     </div>
