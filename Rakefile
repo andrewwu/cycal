@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Cupcake::Application.load_tasks
+Cycal::Application.load_tasks

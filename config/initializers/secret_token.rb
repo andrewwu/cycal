@@ -9,4 +9,4 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Cupcake::Application.config.secret_key_base = '2a5d38161f360a30078564d86845b9510267c40236b85df21042f4b993bbe14b7625c00e3dd1744459cf19b034af0f5a7900923cff5234a18cc98581ed5e2e78'
+Cycal::Application.config.secret_key_base = '2a5d38161f360a30078564d86845b9510267c40236b85df21042f4b993bbe14b7625c00e3dd1744459cf19b034af0f5a7900923cff5234a18cc98581ed5e2e78'
