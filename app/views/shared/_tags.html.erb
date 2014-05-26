@@ -8,8 +8,8 @@
       </div>
 
       <div class="modal-body">
-        <div id="categories" data-bind="foreach: categories">
-          <div class="category">
+        <div id="tags" data-bind="foreach: tags">
+          <div class="tag">
             <div class="picker">
               <input class="js-color-picker" type="text" data-bind="value: color">
             </div>
@@ -20,22 +20,22 @@
             </div>
 
             <div class="action">
-              <a href="#" data-bind="click: $root.removeCategory">
+              <a href="#" data-bind="click: $root.removeTag">
                 <span class="glyphicon glyphicon-remove"></span>
               </a>
             </div>
           </div>
         </div>
 
-        <form class="add-category form-inline" role="form">
+        <form class="add-tag form-inline" role="form">
           <div class="picker">
             <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
           </div>
           <div class="name">
-            <input id="label" type="text" class="form-control" placeholder="Label name">
+            <input id="label" type="text" class="form-control" placeholder="Name">
           </div>
           <div class="action">
-            <button data-bind="click: addCategory" class="btn btn-default">Create</button>
+            <button data-bind="click: addTag" class="btn btn-default">Create</button>
           </div>
         </form>
       </div>

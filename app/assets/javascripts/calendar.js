@@ -1,16 +1,16 @@
 // VARIABLES
-var categoryArray = new Array();
+var tagArray = new Array();
 var eventArray = new Array();
-var categoryIndex = 1;
+var tagIndex = 1;
 var viewModel;
 var calendar;
 
 // CONSTANTS
 var EVENT_KEY = 'events';
-var EVENT_TYPE_KEY = 'categories';
+var EVENT_TYPE_KEY = 'tags';
 
 // VIEW MODELS
-function CategoryViewModel(id, label, color) {
+function TagViewModel(id, label, color) {
   this.id = id;
   this.label = ko.observable(label);
   this.color = ko.observable(color);
@@ -20,32 +20,32 @@ function CategoryViewModel(id, label, color) {
 
   this.editing.subscribe(function(editing) {
     if (!editing) {
-      // TODO: validate category label
+      // TODO: validate tag label
       save();
       refresh();
     }
   });
 
   this.color.subscribe(function(newValue) {
-    // TODO: validate category color
+    // TODO: validate tag color
     save();
     refresh();
   });
 }
 
-function CategoriesViewModel(categories) {
+function TagsViewModel(tags) {
   var self = this;
 
-  self.categories = ko.observableArray(categories);
+  self.tags = ko.observableArray(tags);
 
-  self.addCategory = function() {
+  self.addTag = function() {
     var label = $.trim($('input#label').val());
     var color = $('input#color').val();
-    var category = new CategoryViewModel(categoryIndex, label, color);
+    var tag = new TagViewModel(tagIndex, label, color);
 
     if (label.length > 0) {
-      categoryIndex += 1;
-      self.categories.push(category);
+      tagIndex += 1;
+      self.tags.push(tag);
       save();
       executeSpectrum();
     } else {
@@ -53,16 +53,16 @@ function CategoriesViewModel(categories) {
     }
   }
 
-  self.removeCategory = function(category) {
-    var associatedEvents = findEventsByCategoryId(category.id);
+  self.removeTag = function(tag) {
+    var associatedEvents = findEventsByTagId(tag.id);
 
     if (associatedEvents.length > 0) {
-      alert("There are events associated with this category. Please reassign them first.");
+      alert("There are events associated with this tag. Please reassign them first.");
       return;
     }
 
-    if (confirm('Are you sure you want to delete the category: ' + category.label() + '?')) {
-      self.categories.remove(category);
+    if (confirm('Are you sure you want to delete the tag: ' + tag.label() + '?')) {
+      self.tags.remove(tag);
       save();
     }
   }
@@ -84,17 +84,17 @@ $(function() {
 
     var hours = parseInt($('#hours').val()) || 0;
     var minutes = parseInt($('#minutes').val()) || 0;
-    var category_id = parseInt($('#category').val());
+    var tag_id = parseInt($('#tag').val());
 
     if (!validateDuration(hours, minutes)) { return; }
-    if (!validateLabel(category_id)) { return; }
+    if (!validateLabel(tag_id)) { return; }
 
     var duration = (hours * 60) + minutes;
 
     var event = {
       date: date,
       duration: duration,
-      category_id: category_id
+      tag_id: tag_id
     }
 
     if (inEditMode()) {
@@ -127,14 +127,14 @@ $(function() {
 
   loadFromStorage();
 
-  categoryModels = new Array();
+  tagModels = new Array();
 
-  for (var i = 0; i < categoryArray.length; i++) {
-    category = categoryArray[i];
-    categoryModels.push(new CategoryViewModel(category.id, category.label, category.color));
+  for (var i = 0; i < tagArray.length; i++) {
+    tag = tagArray[i];
+    tagModels.push(new TagViewModel(tag.id, tag.label, tag.color));
   }
 
-  viewModel = new CategoriesViewModel(categoryModels);
+  viewModel = new TagsViewModel(tagModels);
   ko.applyBindings(viewModel);
   refresh();
 
@@ -177,7 +177,7 @@ function validateDuration(hours, minutes) {
 }
 
 function validateLabel(id) {
-  if (!findCategoryById(id)) {
+  if (!findTagById(id)) {
     alert('Label must be valid');
     return false;
   }
@@ -185,17 +185,17 @@ function validateLabel(id) {
   return true;
 }
 
-function setCategoryIndex() {
+function setTagIndex() {
   var max = 1;
 
-  for (var i = 0; i < categoryArray.length; i++) {
-    var id = parseInt(categoryArray[i].id)
+  for (var i = 0; i < tagArray.length; i++) {
+    var id = parseInt(tagArray[i].id)
     if (id > max) {
       max = id;
     }
   }
 
-  categoryIndex = max + 1;
+  tagIndex = max + 1;
 }
 
 function findEventByDate(date) {
@@ -204,14 +204,14 @@ function findEventByDate(date) {
   return result[0];
 }
 
-function findEventsByCategoryId(category_id) {
+function findEventsByTagId(tag_id) {
   var result = $.grep(eventArray,
-                      function(e) { return e.category_id == category_id; });
+                      function(e) { return e.tag_id == tag_id; });
   return result;
 }
 
-function findCategoryById(id) {
-  var result = $.grep(viewModel.categories(), 
+function findTagById(id) {
+  var result = $.grep(viewModel.tags(), 
                       function(e) { return e.id == id; });
 
   if (result.length == 0) {
@@ -231,9 +231,9 @@ function loadFromStorage() {
 
   if (localStorage[EVENT_KEY] !== undefined && localStorage[EVENT_TYPE_KEY] !== undefined) {
     eventArray = JSON.parse(localStorage[EVENT_KEY]);
-    categoryArray = JSON.parse(localStorage[EVENT_TYPE_KEY]);
+    tagArray = JSON.parse(localStorage[EVENT_TYPE_KEY]);
 
-    setCategoryIndex(); 
+    setTagIndex(); 
   } else {
     // no previous data
   }
@@ -242,7 +242,7 @@ function loadFromStorage() {
 function save() {
   if (Modernizr.localstorage) {
     localStorage[EVENT_KEY] = JSON.stringify(eventArray);
-    localStorage[EVENT_TYPE_KEY] = ko.toJSON(viewModel.categories());
+    localStorage[EVENT_TYPE_KEY] = ko.toJSON(viewModel.tags());
   } else {
     // TODO: no localstorage support
   }
@@ -273,7 +273,7 @@ function setModalMode(mode) {
     $('.js-delete-event').hide();
     $('#hours').val('');
     $('#minutes').val('');
-    $('#category').val('0');
+    $('#tag').val('0');
   } else {
     // edit mode
     $('.js-delete-event').show();
@@ -283,11 +283,11 @@ function setModalMode(mode) {
 
     var hours = Math.floor(result.duration / 60);
     var minutes = result.duration % 60;
-    var category = result.category_id;
+    var tag = result.tag_id;
 
     $('#hours').val(hours);
     $('#minutes').val(minutes);
-    $('#category').val(category);
+    $('#tag').val(tag);
   }
 
   $('.js-chosen-select').trigger('chosen:updated');
