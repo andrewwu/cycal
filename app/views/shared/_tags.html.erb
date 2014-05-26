@@ -15,8 +15,8 @@
             </div>
 
             <div class="name">
-              <span data-bind="visible: !editing(), text: label, click: edit"></span>
-              <input data-bind="visible: editing, value: label, hasFocus: editing">
+              <span data-bind="visible: !editing(), text: name, click: edit"></span>
+              <input data-bind="visible: editing, value: name, hasFocus: editing">
             </div>
 
             <div class="action">
@@ -32,7 +32,7 @@
             <input id="color" type="text" class="form-control js-color-picker" placeholder="Hex code">
           </div>
           <div class="name">
-            <input id="label" type="text" class="form-control" placeholder="Name">
+            <input id="name" type="text" class="form-control" placeholder="Name">
           </div>
           <div class="action">
             <button data-bind="click: addTag" class="btn btn-default">Create</button>

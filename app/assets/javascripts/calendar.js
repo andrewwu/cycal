@@ -10,9 +10,9 @@ var EVENT_KEY = 'events';
 var EVENT_TYPE_KEY = 'tags';
 
 // VIEW MODELS
-function TagViewModel(id, label, color) {
+function TagViewModel(id, name, color) {
   this.id = id;
-  this.label = ko.observable(label);
+  this.name = ko.observable(name);
   this.color = ko.observable(color);
 
   this.editing = ko.observable(false);
@@ -20,7 +20,7 @@ function TagViewModel(id, label, color) {
 
   this.editing.subscribe(function(editing) {
     if (!editing) {
-      // TODO: validate tag label
+      // TODO: validate tag name
       save();
       refresh();
     }
@@ -39,17 +39,17 @@ function TagsViewModel(tags) {
   self.tags = ko.observableArray(tags);
 
   self.addTag = function() {
-    var label = $.trim($('input#label').val());
+    var name = $.trim($('input#name').val());
     var color = $('input#color').val();
-    var tag = new TagViewModel(tagIndex, label, color);
+    var tag = new TagViewModel(tagIndex, name, color);
 
-    if (label.length > 0) {
+    if (name.length > 0) {
       tagIndex += 1;
       self.tags.push(tag);
       save();
       executeSpectrum();
     } else {
-      alert("Tag label can't be blank.");
+      alert("Tag name can't be blank.");
     }
   }
 
@@ -61,7 +61,7 @@ function TagsViewModel(tags) {
       return;
     }
 
-    if (confirm('Are you sure you want to delete the tag: ' + tag.label() + '?')) {
+    if (confirm('Are you sure you want to delete the tag: ' + tag.name() + '?')) {
       self.tags.remove(tag);
       save();
     }
@@ -87,7 +87,7 @@ $(function() {
     var tag_id = parseInt($('#tag').val());
 
     if (!validateDuration(hours, minutes)) { return; }
-    if (!validateLabel(tag_id)) { return; }
+    if (!validateTag(tag_id)) { return; }
 
     var duration = (hours * 60) + minutes;
 
@@ -131,7 +131,7 @@ $(function() {
 
   for (var i = 0; i < tagArray.length; i++) {
     tag = tagArray[i];
-    tagModels.push(new TagViewModel(tag.id, tag.label, tag.color));
+    tagModels.push(new TagViewModel(tag.id, tag.name, tag.color));
   }
 
   viewModel = new TagsViewModel(tagModels);
@@ -176,9 +176,9 @@ function validateDuration(hours, minutes) {
   return true;
 }
 
-function validateLabel(id) {
+function validateTag(id) {
   if (!findTagById(id)) {
-    alert('Label must be valid');
+    alert('Tag must be valid');
     return false;
   }
 

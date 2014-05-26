@@ -18,7 +18,7 @@ body {
   width: 407px;
 }
 
-h2.labels {
+h2.tags {
   font-size: 20px;
 }
 
@@ -63,7 +63,7 @@ form.add-tag {
   padding-right: 0;
   border-top: 3px dotted #EBEBEB;
 
-  input#label {
+  input#name {
     width: 213px;
   }
 }
