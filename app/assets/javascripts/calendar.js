@@ -6,8 +6,8 @@ var viewModel;
 var calendar;
 
 // CONSTANTS
-var RIDE_KEY = 'events';
-var RIDE_TYPE_KEY = 'categories';
+var EVENT_KEY = 'events';
+var EVENT_TYPE_KEY = 'categories';
 
 // VIEW MODELS
 function CategoryViewModel(id, label, color) {
@@ -79,8 +79,8 @@ $(function() {
     weekOffset: 1
   });
 
-  $('.js-save-ride').click(function() {
-    var date = $('.js-ride-form').data('date');
+  $('.js-save-event').click(function() {
+    var date = $('.js-event-form').data('date');
 
     var hours = parseInt($('#hours').val()) || 0;
     var minutes = parseInt($('#minutes').val()) || 0;
@@ -107,15 +107,15 @@ $(function() {
 
     refresh();
     save();
-    $('.js-ride-form').modal('hide');
+    $('.js-event-form').modal('hide');
   });
 
   // TODO: more descriptive binding
-  $('.js-delete-ride').click(function() {
+  $('.js-delete-event').click(function() {
     if (confirm('Are you sure?')) {
-      $('.js-ride-form').modal('hide');
+      $('.js-event-form').modal('hide');
 
-      var date = $('.js-ride-form').data('date');
+      var date = $('.js-event-form').data('date');
       var result = findEventByDate(date)
 
       var index = eventArray.indexOf(result);
@@ -229,9 +229,9 @@ function loadFromStorage() {
 
   // TODO: change these to constant keys
 
-  if (localStorage[RIDE_KEY] !== undefined && localStorage[RIDE_TYPE_KEY] !== undefined) {
-    eventArray = JSON.parse(localStorage[RIDE_KEY]);
-    categoryArray = JSON.parse(localStorage[RIDE_TYPE_KEY]);
+  if (localStorage[EVENT_KEY] !== undefined && localStorage[EVENT_TYPE_KEY] !== undefined) {
+    eventArray = JSON.parse(localStorage[EVENT_KEY]);
+    categoryArray = JSON.parse(localStorage[EVENT_TYPE_KEY]);
 
     setCategoryIndex(); 
   } else {
@@ -241,8 +241,8 @@ function loadFromStorage() {
 
 function save() {
   if (Modernizr.localstorage) {
-    localStorage[RIDE_KEY] = JSON.stringify(eventArray);
-    localStorage[RIDE_TYPE_KEY] = ko.toJSON(viewModel.categories());
+    localStorage[EVENT_KEY] = JSON.stringify(eventArray);
+    localStorage[EVENT_TYPE_KEY] = ko.toJSON(viewModel.categories());
   } else {
     // TODO: no localstorage support
   }
@@ -253,13 +253,13 @@ function refresh() {
 }
 
 // MODAL
-$(document).on('click', '.js-new-ride', function() {
+$(document).on('click', '.js-new-event', function() {
   var event = $(this).hasClass('event');
-  $('.js-ride-form').data('date', $(this).data('date'));
+  $('.js-event-form').data('date', $(this).data('date'));
 
   if (event) {
     var index = parseInt($(this).data('index'));
-    $('.js-ride-form').data('mode', 'edit');
+    $('.js-event-form').data('mode', 'edit');
     setModalMode('edit');
   } else {
     setModalMode('new');
@@ -267,18 +267,18 @@ $(document).on('click', '.js-new-ride', function() {
 });
 
 function setModalMode(mode) {
-  $('.js-ride-form').data('mode', mode);
+  $('.js-event-form').data('mode', mode);
 
   if (mode == 'new') {
-    $('.js-delete-ride').hide();
+    $('.js-delete-event').hide();
     $('#hours').val('');
     $('#minutes').val('');
     $('#category').val('0');
   } else {
     // edit mode
-    $('.js-delete-ride').show();
+    $('.js-delete-event').show();
 
-    var date = $('.js-ride-form').data('date');
+    var date = $('.js-event-form').data('date');
     var result = findEventByDate(date);
 
     var hours = Math.floor(result.duration / 60);
@@ -294,5 +294,5 @@ function setModalMode(mode) {
 }
 
 function inEditMode() {
-  return $('.js-ride-form').data('mode') == 'edit';
+  return $('.js-event-form').data('mode') == 'edit';
 }
