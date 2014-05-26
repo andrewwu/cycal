@@ -39,14 +39,18 @@ function CategoriesViewModel(categories) {
   self.categories = ko.observableArray(categories);
 
   self.addCategory = function() {
-    var label= $('input#label').val();
+    var label = $.trim($('input#label').val());
     var color = $('input#color').val();
     var category = new CategoryViewModel(categoryIndex, label, color);
 
-    categoryIndex += 1;
-    self.categories.push(category);
-    save();
-    executeSpectrum();
+    if (label.length > 0) {
+      categoryIndex += 1;
+      self.categories.push(category);
+      save();
+      executeSpectrum();
+    } else {
+      alert("Tag label can't be blank.");
+    }
   }
 
   self.removeCategory = function(category) {
